@@ -1,68 +1,113 @@
 #!/bin/sh
 
-if [ -d /usr/share/enigma2/python/Plugins/Extensions/MultiQuickButton ]; then
-echo "> removing package please wait..."
-sleep 3s 
-rm -rf /usr/share/enigma2/python/Plugins/Extensions/MultiQuickButton >/dev/null 2>&1
+# color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
 
-echo "*******************************************"
-echo "*             Removed Finished            *"
-echo "*******************************************"
-sleep 3s
+# Show title
+echo -e "${CYAN}"
+echo "#########################################################"
+echo "#           MBotton.tar.gz Installation Script          #"
+echo "#                   Version 2.0                         #"
+echo "#########################################################"
+echo -e "${NC}"
+sleep 2s
 
-else
+# Remove unnecessary files and folders
+echo -e "${YELLOW}> Removing unnecessary files and folders...${NC}"
+sleep 2s
 
-#config
-skin=MBotton-BH
-version=2.0
-url=https://raw.githubusercontent.com/Ham-ahmed/808/refs/heads/main/MBotton.tar.gz
-package=/var/volatile/tmp/$skin-$version.tar.gz
-
-echo "> Downloading $skin-$version skin  please wait ..."
-sleep 3s
-
-#remove unnecessary files and folders
-if [  -d "/CONTROL" ]; then
-rm -r  /CONTROL >/dev/null 2>&1
+if [ -d "/CONTROL" ]; then
+    rm -r /CONTROL >/dev/null 2>&1
+    echo -e "${GREEN}✓ Removed /CONTROL directory${NC}"
 fi
-rm -rf /control >/dev/null 2>&1
-rm -rf /postinst >/dev/null 2>&1
-rm -rf /preinst >/dev/null 2>&1
-rm -rf /prerm >/dev/null 2>&1
-rm -rf /postrm >/dev/null 2>&1
+
+directories="/control /postinst /preinst /prerm /postrm"
+for dir in $directories; do
+    if [ -d "$dir" ] || [ -f "$dir" ]; then
+        rm -rf "$dir" >/dev/null 2>&1
+        echo -e "${GREEN}✓ Removed $dir${NC}"
+    fi
+done
+
+# Clean temporary files
+echo -e "${YELLOW}> Cleaning temporary files...${NC}"
 rm -rf /tmp/*.ipk >/dev/null 2>&1
 rm -rf /tmp/*.tar.gz >/dev/null 2>&1
+echo -e "${GREEN}✓ Temporary files cleaned${NC}"
 
-wget -O $package --no-check-certificate $url
+# Settings
+plugin=MBotton-BH
+version=2.0
+url=https://raw.githubusercontent.com/Ham-ahmed/808/refs/heads/main/MBotton.tar.gz
+package=/var/volatile/tmp/$plugin-$version.tar.gz
+
+# Download and install
+echo ""
+echo -e "${BLUE}> Downloading $plugin-$version package please wait...${NC}"
+sleep 3s
+
+# Progress bar during download
+echo -e "${CYAN}"
+wget --show-progress -qO $package --no-check-certificate $url
+echo -e "${NC}"
+
+# Check if the download was successful
+if [ ! -f "$package" ]; then
+    echo -e "${RED}❌ Download failed!${NC}"
+    echo -e "${RED}> $plugin-$version package download failed${NC}"
+    sleep 3s
+    exit 1
+fi
+
+echo -e "${GREEN}✓ Download completed successfully${NC}"
+echo -e "${YELLOW}> Extracting package...${NC}"
+
+# Extract files
 tar -xzf $package -C /
 extract=$?
-rm -rf package >/dev/null 2>&1
+rm -rf $package >/dev/null 2>&1
 
-echo ''
-if [ $extract -eq 0 ]; then 
-echo "> $skin-$version skin installed successfully"
-sleep 3s
+echo ""
+if [ $extract -eq 0 ]; then
+    echo -e "${GREEN}"
+    echo "#########################################################"
+    echo "#              INSTALLED SUCCESSFULLY                   #"
+    echo "#              ON - MagicPanelGold v11.0                #"
+    echo "#           Enigma2 restart is required                 #"
+    echo "#        .::UPLOADED BY  >>>>   HAMDY_AHMED::.          #"
+    echo "#     https://www.facebook.com/share/g/18qCRuHz26/      #"
+    echo "#########################################################"
+    echo -e "${YELLOW}"
+    echo "#########################################################"
+    echo "#           your Device will RESTART Now                #"
+    echo "#########################################################"
+    echo -e "${NC}"
+    sleep 3s
+    
+    # إRestart (you can unsuspend if you want to restart automatically)
+    # echo -e "${RED}> Restarting device...${NC}"
+    # sleep 2s
+    # reboot
+    
 else
-echo "> $skin-$version skin installation failed"
-sleep 3s
-fi
+    echo -e "${RED}"
+    echo "#########################################################"
+    echo "#                 INSTALLATION FAILED                  #"
+    echo "#########################################################"
+    echo -e "${NC}"
+    echo -e "${RED}> $plugin-$version package installation failed${NC}"
+    sleep 3s
 fi
 
-wait
-sleep 2;
-echo "" 
-echo "" 
-echo "*****************************************************"
-echo "#               INSTALLED SUCCESSFULLY              #"
-echo "*             ON - MagicPanelGold v11.0             *"
-echo "*            Enigma2 restart is required            *"
-echo "*****************************************************"
-echo "            UPLOADED BY  >>>>   HAMDY_AHMED          "
-sleep 4;
-	echo '================================================='
-###########################################                                                                                                                  
-echo ". >>>>         RESTARING     <<<<"
-echo "*****************************************************"
-wait
-killall -9 enigma2
-exit 0
+# Closing message
+echo ""
+echo -e "${CYAN}#######################################${NC}"
+echo -e "${WHITE}Script execution completed${NC}"
+echo -e "${CYAN}#######################################${NC}"
