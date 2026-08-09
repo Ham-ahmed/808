@@ -12,10 +12,10 @@ NC='\033[0m' # No Color
 
 # Show title
 echo -e "${CYAN}"
-echo "#########################################################"
-echo "#  PluginBrowser-BH.tar.gz Installation Script          #"
-echo "#                   Version 2.0                         #"
-echo "#########################################################"
+echo "##################################################"
+echo "#  PluginBrowser-BH.tar.gz Installation Script   #"
+echo "#                   Version 3.0                  #"
+echo "##################################################"
 echo -e "${NC}"
 sleep 2s
 
@@ -44,7 +44,7 @@ echo -e "${GREEN}✓ Temporary files cleaned${NC}"
 
 # Settings
 plugin=PluginBrowser-BH
-version=2.0
+version=3.0
 url=https://raw.githubusercontent.com/Ham-ahmed/808/refs/heads/main/PluginBrowser-BH.tar.gz
 package=/var/volatile/tmp/$plugin-$version.tar.gz
 
@@ -77,30 +77,33 @@ rm -rf $package >/dev/null 2>&1
 echo ""
 if [ $extract -eq 0 ]; then
     echo -e "${GREEN}"
-    echo "#########################################################"
-    echo "#              INSTALLED SUCCESSFULLY                   #"
-    echo "#              ON - MagicPanelGold v11.0                #"
-    echo "#           Enigma2 restart is required                 #"
-    echo "#        .::UPLOADED BY  >>>>   HAMDY_AHMED::.          #"
-    echo "#     https://www.facebook.com/share/g/18qCRuHz26/      #"
-    echo "#########################################################"
+    echo "######################################################"
+    echo "#              INSTALLED SUCCESSFULLY                #"
+    echo "#              ON - MagicPanelGold v11.0             #"
+    echo "#           Enigma2 restart is required              #"
+    echo "#        .::UPLOADED BY  >>>>   HAMDY_AHMED::.       #"
+    echo "#     https://www.facebook.com/share/g/18qCRuHz26/   #"
+    echo "######################################################"
     echo -e "${YELLOW}"
-    echo "#########################################################"
-    echo "#           your Device will RESTART Now                #"
-    echo "#########################################################"
+    echo "########################################"
+    echo "#   your Device will RESTART Now       #"
+    echo "########################################"
     echo -e "${NC}"
     sleep 3s
     
-    # إRestart (you can unsuspend if you want to restart automatically)
-    # echo -e "${RED}> Restarting device...${NC}"
-    # sleep 2s
-    # reboot
+    # إضافة ريستارت بعد 3 ثواني
+    echo -e "${RED}> Restarting device in 3 seconds...${NC}"
+    echo -e "${YELLOW}> Press Ctrl+C to cancel restart${NC}"
+    sleep 3s
+    echo -e "${RED}> Restarting device now...${NC}"
+    sleep 1s
+    reboot
     
 else
     echo -e "${RED}"
-    echo "#########################################################"
-    echo "#                 INSTALLATION FAILED                  #"
-    echo "#########################################################"
+    echo "######################################"
+    echo "#       INSTALLATION FAILED          #"
+    echo "######################################"
     echo -e "${NC}"
     echo -e "${RED}> $plugin-$version package installation failed${NC}"
     sleep 3s
@@ -108,6 +111,6 @@ fi
 
 # Closing message
 echo ""
-echo -e "${CYAN}#######################################${NC}"
+echo -e "${CYAN}###########################${NC}"
 echo -e "${WHITE}Script execution completed${NC}"
-echo -e "${CYAN}#######################################${NC}"
+echo -e "${CYAN}###########################${NC}"
